@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // Node denotes a node structure
 type Node struct {
@@ -10,64 +8,51 @@ type Node struct {
 	nextNode *Node
 }
 
-func read(node Node, n int) {
-	for i := 0; i <= n; i++ {
-		node = *node.nextNode
-	}
-
-	fmt.Println(node.data)
-}
-
-func search(node Node, n int) {
-	i := 1
+func add(node *Node, val int) {
+	newNode := Node{val, nil}
 	for node.nextNode != nil {
-		if node.data == n {
-			fmt.Println(i)
-			break
-		} else {
-			i++
-			node = *node.nextNode
-		}
-	}
-}
-
-func insert(node Node, newNode Node, k int) {
-	for i := 0; i < k; i++ {
-		node = *node.nextNode
+		node = node.nextNode
 	}
 
-	nodeNext := node.nextNode
-
-	newNode.nextNode = nodeNext
 	node.nextNode = &newNode
 }
 
-func delete(node Node, n int) {
-	for i := 0; i < n; i++ {
-		node = *node.nextNode
+func printlist(node *Node) {
+	for node.nextNode != nil {
+		fmt.Printf("%d-", node.data)
+		node = node.nextNode
 	}
 
-	nodeNext := *node.nextNode
+	fmt.Printf("%d\n", node.data)
+}
 
-	node.nextNode = nodeNext.nextNode
-	nodeNext.nextNode = nil
+func insert(node *Node, newNode Node, k int) {
+	for i := 1; i < k; i++ {
+		node = node.nextNode
+	}
+
+	newNode.nextNode = node.nextNode
+	node.nextNode = &newNode
+}
+
+func delete(node *Node, k int) {
+	for i := 1; i < k-1; i++ {
+		node = node.nextNode
+	}
+
+	node.nextNode = node.nextNode.nextNode
 }
 
 func main() {
-	node1 := Node{2, nil}
-	node2 := Node{5, nil}
-	node3 := Node{6, nil}
-	node4 := Node{3, nil}
-
-	node1.nextNode = &node2
-	node2.nextNode = &node3
-	node3.nextNode = &node4
-	fmt.Println(node1, node2, node3)
-
-	read(node1, 1)
-	search(node1, 6)
-
-	node5 := Node{7, nil}
-	insert(node1, node5, 2)
-	delete(node1, 2)
+	node1 := Node{3, nil}
+	arr := []int{5, 7, 6, 2, 8}
+	for _, val := range arr {
+		add(&node1, val)
+	}
+	node2 := Node{9, nil}
+	printlist(&node1)
+	insert(&node1, node2, 3)
+	printlist(&node1)
+	delete(&node1, 5)
+	printlist(&node1)
 }
